@@ -36,7 +36,7 @@ server.post("/api/posts", (req, res) => {
           });
       })
       .catch(err => {
-        res.status(500).json({ error: "There was an error saving db" });
+        res.status(500).json({ error: "There was an error while saving the post to the database" });
       });
   } else {
     res.status(400).json({ err: "Title and content needed" });
@@ -68,6 +68,27 @@ server.delete("/api/posts/:id", (req, res) => {
     });
 });
 
-//
+//put req
+server.put('/api/post/:id', (req, res)=>{
+  const id = req.params.id;
+  const newPost = req.body;
+   console.log('this is newPost', newPost)
+
+   db.findById(id)
+   .then(result => {
+     if(result.length > 0) {
+       if (newPost.title && newPost.contents){
+         db.update(id, newPost)
+         .then(results =>{
+           console.log('this is the result', results)
+         })
+         .catch(err => {console.log(err)})
+       }
+     }
+   })
+
+})
+
+
 
 module.exports = server;
